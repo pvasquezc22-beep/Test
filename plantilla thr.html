@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plantilla Ultra Simplificada para el TRH</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        .section {
+            margin-bottom: 25px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .section-title {
+            background-color: #3498db;
+            color: white;
+            padding: 8px;
+            margin-top: 0;
+            margin-bottom: 15px;
+            border-radius: 3px;
+            font-size: 16px;
+        }
+        .row {
+            display: flex;
+            margin-bottom: 10px;
+            align-items: center;
+        }
+        label {
+            display: inline-block;
+            font-weight: bold;
+        }
+        input, select {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            margin-right: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #3498db;
+            color: white;
+            text-align: left;
+            padding: 8px;
+        }
+        td {
+            padding: 8px;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .boton-calcular {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #2ecc71;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 20px 0;
+        }
+        .boton-calcular:hover {
+            background-color: #27ae60;
+        }
+        .resultado {
+            font-size: 18px;
+            font-weight: bold;
+            color: #e74c3c;
+            text-align: center;
+            margin: 20px 0;
+            padding: 10px;
+            border: 2px solid #e74c3c;
+            border-radius: 5px;
+        }
+        .interpretacion {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+        .guia-simple {
+            background-color: #e8f4fc;
+            padding: 10px;
+            border-left: 4px solid #3498db;
+            margin: 10px 0;
+        }
+        .destacado {
+            font-weight: bold;
+            color: #e74c3c;
+        }
+        .checkbox-label {
+            font-weight: normal;
+            margin-right: 15px;
+            display: inline-block;
+            cursor: pointer;
+        }
+        .checkbox-container {
+            margin: 5px 0;
+        }
+        .hidden {
+            display: none;
+        }
+        .resultado-detallado {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f5f5f5;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        .print-button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 20px;
+        }
+        .print-button:hover {
+            background-color: #2980b9;
+        }
+        @media print {
+            .no-print {
+                display: none;
+            }
+            body {
+                padding: 0;
+                margin: 0;
+            }
+            .section {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Plantilla Ultra Simplificada para el TRH</h1>
+    
+    <div class="section">
+        <h2 class="section-title">PASO 1: Datos Básicos del Caso</h2>
+        <div class="row">
+            <label for="nro-caso">N° de Caso:</label>
+            <input type="text" id="nro-caso">
+        </div>
+        <div class="row">
+            <label for="conductor">Conductor:</label>
+            <input type="text" id="conductor">
+        </div>
+        <div class="row">
+            <label for="fecha-accidente">Fecha del accidente:</label>
+            <input type="date" id="fecha-accidente">
+        </div>
+        <div class="row">
+            <label>Condiciones generales:</label>
+            <div>
+                <label class="checkbox-label"><input type="checkbox" id="condicion-dia"> Día</label>
+                <label class="checkbox-label"><input type="checkbox" id="condicion-noche"> Noche</label>
+                <label class="checkbox-label"><input type="checkbox" id="condicion-lluvia"> Lluvia</label>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2 class="section-title">PASO 2: Seleccione la situación del accidente</h2>
+        <div class="guia-simple">
+            Marque con X UNA SOLA opción que mejor describe la situación general
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Situación</th>
+                    <th>Marque X</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <label class="checkbox-label" for="situacion-optima">
+                            <strong>Óptima:</strong> Día, buena visibilidad, conductor alerta, situación esperada
+                            <div class="destacado">TRH Base: 1.2 segundos</div>
+                        </label>
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="radio" name="situacion-base" id="situacion-optima" checked>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label class="checkbox-label" for="situacion-normal">
+                            <strong>Normal:</strong> Día, situación inesperada, conductor alerta
+                            <div class="destacado">TRH Base: 1.6 segundos</div>
+                        </label>
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="radio" name="situacion-base" id="situacion-normal">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label class="checkbox-label" for="situacion-compleja">
+                            <strong>Compleja:</strong> Situación ambigua, condiciones normales
+                            <div class="destacado">TRH Base: 2.0 segundos</div>
+                        </label>
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="radio" name="situacion-base" id="situacion-compleja">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label class="checkbox-label" for="situacion-adversa">
+                            <strong>Adversa:</strong> Noche, mal clima o baja visibilidad
+                            <div class="destacado">TRH Base: 2.3 segundos</div>
+                        </label>
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="radio" name="situacion-base" id="situacion-adversa">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label class="checkbox-label" for="situacion-muy-adversa">
+                            <strong>Muy adversa:</strong> Noche + imprevisto o múltiples factores negativos
+                            <div class="destacado">TRH Base: 2.8 segundos</div>
+                        </label>
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="radio" name="situacion-base" id="situacion-muy-adversa">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section">
+        <h2 class="section-title">PASO 3: Factores del Conductor</h2>
+        <div class="guia-simple">
+            Marque con X los factores presentes y su nivel de impacto
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Factor</th>
+                    <th>¿Presente?</th>
+                    <th>Nivel de Impacto</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Edad avanzada (>65 años)</td>
+                    <td style="text-align: center;">
+                        <input type="checkbox" id="factor-edad-avanzada">
+                    </td>
+                    <td>
+                        <div class="checkbox-container">
+                            <label class="checkbox-label"><input type="radio" name="nivel-edad-avanzada" value="leve" disabled> Leve (+5%)</label>
+                            <label class="checkbox-label"><input type="radio" name="nivel-edad-avanzada" value="moderado" disabled checked> Moderado (+15%)</label>
+                            <label class="checkbox-label"><input type="radio" name="nivel-edad-avanzada" value="alto" disabled> Alto (+25%)</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Edad muy joven (<25 años)</td>
+                    <td style="text-align: center;">
+                        <input type="checkbox" id="factor-edad-joven">
+                    </td>
+                    <td>
+                        <div class="checkbox-container">
+                            <label class="checkbox-label"><input type="radio" name="nivel-edad-joven" value="leve" disabled> Leve (+5%)</label>
+                            <label class="checkbox-label"><input type="radio" name="nivel-edad-joven" value="moderado" disabled checked> Moderado (+15%)</label>
+                            <label class="checkbox-label"><input type="radio" name="nivel-edad-joven" value="alto" disabled> Alto (+25%)</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Fatiga</td>
+                    <td style="text-align: center;">
+                        <input type="checkbox" id="factor-fatiga">
+                    </td>
+                    <td>
+                        <div class="checkbox-container">
+                            <label class="checkbox-label"><input type="radio" name="nivel-fatiga" value="leve" disabled> Leve (+5%)</label>
+                            <label class="checkbox-label"><input type="radio" name="nivel-fatiga" value="moderado" disabled checked> Moderado (+15%)</label>
+                            <label class="checkbox-label"><input type="radio" name="nivel-fatiga" value="alto" disabled> Alto (+25%)</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Alcohol/drogas</td>
+                    <td style="text-align: center;">
+                        <input type="checkbox" id="factor-alcohol">
+                    </td>
+                    <td>
+                        <div class="checkbox-container">
+                            <label class="checkbox-label"><input type="radio" name="nivel-alcohol" value="leve" disabled> Leve (+5%)</label>
+                            <label class="checkbox-label"><input type="radio" name="nivel-alcohol" value="moderado" disabled checked> Moderado (+15%)</label>
+                            <label class="checkbox-label"><input type="radio" name="nivel-alcohol" value="alto" disabled> Alto (+25%)</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Baja experiencia (<2 años)</td>
+                    <td style="text-align: center;">
+                        <input type="checkbox" id="factor-experiencia">
+                    </td>
+                    <td>
+                        <div class="checkbox-container">
+                            <label class="checkbox-label"><input type="radio" name="nivel-experiencia" value="leve" disabled> Leve (+5%)</label>
+                            <label class="checkbox-label"><input type="radio" name="nivel-experiencia" value="moderado" disabled checked> Moderado (+15%)</label>
+                            <label class="checkbox-label"><input type="radio" name="nivel-experiencia" value="alto" disabled> Alto (+25%)</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Uso de celular/Distracción</td>
+                    <td style="text-align: center;">
+                        <input type="checkbox" id="factor-distraccion">
+                    </td>
+                    <td>
+                        <div class="checkbox-container">
+                            <label class="checkbox-label"><input type="radio" name="nivel-distraccion" value="leve" disabled> Leve (+5%)</label>
+                            <label class="checkbox-label"><input type="radio" name="nivel-distraccion" value="moderado" disabled checked> Moderado (+15%)</label>
+                            <label class="checkbox-label"><input type="radio" name="nivel-distraccion" value="alto" disabled> Alto (+25%)</label>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section">
+        <h2 class="section-title">PASO 4: Factores del Entorno</h2>
+        <div class="guia-simple">
+            Marque con X los factores presentes y su nivel de impacto
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Factor</th>
+                    <th>¿Presente?</th>
+                    <th>Nivel de Impacto</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Iluminación deficiente</td>
+                    <td style="text-align: center;">
+                        <input type="checkbox" id="factor-iluminacion">
+                    </td>
+                    <td>
+                        <div class="checkbox-container">
+                            <label class="checkbox-label"><input type="radio" name="nivel-iluminacion" value="leve" disabled> Leve (+5%)</label>
+                            <label class="checkbox-label"><input type="radio" name="nivel-iluminacion" value="moderado" disabled checked> Moderado (+15%)</label>
+                            <label class="checkbox-label"><input type="radio" name="nivel-iluminacion" value="alto" disabled> Alto (+25%)</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Condiciones climáticas adversas</td>
+                    <td style="text-align: center;">
+                        <input type="checkbox" id="factor-clima">
+                    </td>
+                    <td>
+                        <div class="checkbox-container">
+                            <label class="checkbox-label"><input type="radio" name="nivel-clima" value="leve" disabled> Leve (+5%)</label>
+                            <label class="checkbox-label"><input type="radio" name="nivel-clima" value="moderado" disabled checked> Moderado (+15%)</label>
+                            <label class="checkbox-label"><input type="radio" name="nivel-clima" value="alto" disabled> Alto (+25%)</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Señalización deficiente</td>
+                    <td style="text-align: center;">
+                        <input type="checkbox" id="factor-senalizacion">
+                    </td>
+                    <td>
+                        <div class="checkbox-container">
+                            <label class="checkbox-label"><input type="radio" name="nivel-senalizacion" value="leve" disabled> Leve (+5%)</label>
+                            <label class="checkbox-label"><input type="radio" name="nivel-senalizacion" value="moderado" disabled checked> Moderado (+15%)</label>
+                            <label class="checkbox-label"><input type="radio" name="nivel-senalizacion" value="alto" disabled> Alto (+25%)</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Vía en mal estado</td>
+                    <td style="text-align: center;">
+                        <input type="checkbox" id="factor-via">
+                    </td>
+                    <td>
+                        <div class="checkbox-container">
+                            <label class="checkbox-label"><input type="radio" name="nivel-via" value="leve" disabled> Leve (+5%)</label>
+                            <label class="checkbox-label"><input type="radio" name="nivel-via" value="moderado" disabled checked> Moderado (+15%)</label>
+                            <label class="checkbox-label"><input type="radio" name="nivel-via" value="alto" disabled> Alto (+25%)</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Situación totalmente inesperada</td>
+                    <td style="text-align: center;">
+                        <input type="checkbox" id="factor-inesperada">
+                    </td>
+                    <td>
+                        <div class="checkbox-container">
+                            <label class="checkbox-label"><input type="radio" name="nivel-inesperada" value="leve" disabled> Leve (+5%)</label>
+                            <label class="checkbox-label"><input type="radio" name="nivel-inesperada" value="moderado" disabled checked> Moderado (+15%)</label>
+                            <label class="checkbox-label"><input type="radio" name="nivel-inesperada" value="alto" disabled> Alto (+25%)</label>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section">
+        <h2 class="section-title">PASO 5: Tipo de Respuesta Requerida</h2>
+        <div class="guia-simple">
+            Marque con X UNA SOLA opción que mejor describe la respuesta que el conductor debió realizar
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Tipo de respuesta</th>
+                    <th>Marque X</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <label class="checkbox-label" for="respuesta-simple">
+                            <strong>Simple:</strong> Solo frenar
+                            <div class="destacado">Ajuste: +0%</div>
+                        </label>
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="radio" name="tipo-respuesta" id="respuesta-simple" checked>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label class="checkbox-label" for="respuesta-moderada">
+                            <strong>Moderada:</strong> Frenar y girar ligeramente
+                            <div class="destacado">Ajuste: +7%</div>
+                        </label>
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="radio" name="tipo-respuesta" id="respuesta-moderada">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label class="checkbox-label" for="respuesta-compleja">
+                            <strong>Compleja:</strong> Maniobra de evasión precisa
+                            <div class="destacado">Ajuste: +15%</div>
+                        </label>
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="radio" name="tipo-respuesta" id="respuesta-compleja">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label class="checkbox-label" for="respuesta-muy-compleja">
+                            <strong>Muy compleja:</strong> Múltiples acciones coordinadas
+                            <div class="destacado">Ajuste: +25%</div>
+                        </label>
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="radio" name="tipo-respuesta" id="respuesta-muy-compleja">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section">
+        <h2 class="section-title">PASO 6: Cálculo del TRH</h2>
+        <button class="boton-calcular" onclick="calcularTRH()">CALCULAR TRH</button>
+        
+        <div class="resultado">
+            <div>TRH AJUSTADO: <span id="trh-ajustado-final">0.00</span> segundos</div>
+        </div>
+        
+        <div class="interpretacion">
+            <strong>Interpretación:</strong>
+            <div id="interpretacion-resultado"></div>
+        </div>
+        
+        <div class="resultado-detallado hidden" id="resultado-detallado">
+            <strong>Desglose del cálculo:</strong>
+            <div>TRH Base: <span id="valor-trh-base">0.00</span> segundos</div>
+            <div>Ajuste por factores del conductor: <span id="valor-ajuste-conductor">0</span>%</div>
+            <div>Ajuste por factores del entorno: <span id="valor-ajuste-entorno">0</span>%</div>
+            <div>Ajuste por tipo de respuesta: <span id="valor-ajuste-respuesta">0</span>%</div>
+            <div>Ajuste total: <span id="valor-ajuste-total">0</span>%</div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2 class="section-title">PASO 7: Evitabilidad del Accidente</h2>
+        <div class="guia-simple">
+            Complete estos campos para determinar si el accidente era evitable
+        </div>
+        
+        <div class="row">
+            <label for="velocidad">Velocidad del vehículo:</label>
+            <input type="number" id="velocidad" min="0" max="200" style="width: 60px;"> km/h
+        </div>
+        
+        <div class="row">
+            <label for="distancia-disponible">Distancia disponible:</label>
+            <input type="number" id="distancia-disponible" min="0" style="width: 60px;"> metros
+            <div style="font-size: 0.9em; color: #666; margin-left: 10px;">(desde donde debió ver el peligro hasta el punto de impacto)</div>
+        </div>
+        
+        <button class="boton-calcular" onclick="calcularEvitabilidad()">CALCULAR EVITABILIDAD</button>
+        
+        <div class="resultado">
+            <div id="resultado-evitabilidad">Complete los campos y presione el botón</div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2 class="section-title">Datos del Evaluador</h2>
+        <div class="row">
+            <label for="evaluador">Evaluado por:</label>
+            <input type="text" id="evaluador">
+        </div>
+        <div class="row">
+            <label for="fecha-evaluacion">Fecha de evaluación:</label>
+            <input type="date" id="fecha-evaluacion">
+        </div>
+    </div>
+    
+    <div class="no-print" style="text-align: center; margin-top: 20px;">
+        <button class="print-button" onclick="window.print()">Imprimir informe</button>
+    </div>
+
+    <script>
+        // Habilitar/deshabilitar radios de nivel según checkbox
+        document.querySelectorAll('input[type="checkbox"]').forEach(function(checkbox) {
+            const factorId = checkbox.id;
+            const nivelRadios = document.querySelectorAll(`input[name="nivel-${factorId.replace('factor-', '')}"]`);
+            
+            checkbox.addEventListener('change', function() {
+                nivelRadios.forEach(function(radio) {
+                    radio.disabled = !checkbox.checked;
+                });
+            });
+        });
+        
+        function getTRHBase() {
+            if (document.getElementById('situacion-optima').checked) return 1.2;
+            if (document.getElementById('situacion-normal').checked) return 1.6;
+            if (document.getElementById('situacion-compleja').checked) return 2.0;
+            if (document.getElementById('situacion-adversa').checked) return 2.3;
+            if (document.getElementById('situacion-muy-adversa').checked) return 2.8;
+            return 1.2; // Valor predeterminado
+        }
+        
+        function getAjusteRespuesta() {
+            if (document.getElementById('respuesta-simple').checked) return 0;
+            if (document.getElementById('respuesta-moderada').checked) return 7;
+            if (document.getElementById('respuesta-compleja').checked) return 15;
+            if (document.getElementById('respuesta-muy-compleja').checked) return 25;
+            return 0; // Valor predeterminado
+        }
+        
+        function getAjustePorFactor(factorId, nivelName) {
+            const checkbox = document.getElementById(factorId);
+            if (!checkbox || !checkbox.checked) return 0;
+            
+            const nivelRadios = document.querySelectorAll(`input[name="${nivelName}"]:checked`);
+            if (!nivelRadios || nivelRadios.length === 0) return 0;
+            
+            const nivelValue = nivelRadios[0].value;
+            if (nivelValue === 'leve') return 5;
+            if (nivelValue === 'moderado') return 15;
+            if (nivelValue === 'alto') return 25;
+            return 0;
+        }
+        
+        function calcularAjusteConductor() {
+            let total = 0;
+            total += getAjustePorFactor('factor-edad-avanzada', 'nivel-edad-avanzada');
+            total += getAjustePorFactor('factor-edad-joven', 'nivel-edad-joven');
+            total += getAjustePorFactor('factor-fatiga', 'nivel-fatiga');
+            total += getAjustePorFactor('factor-alcohol', 'nivel-alcohol');
+            total += getAjustePorFactor('factor-experiencia', 'nivel-experiencia');
+            total += getAjustePorFactor('factor-distraccion', 'nivel-distraccion');
+            return total;
+        }
+        
+        function calcularAjusteEntorno() {
+            let total = 0;
+            total += getAjustePorFactor('factor-iluminacion', 'nivel-iluminacion');
+            total += getAjustePorFactor('factor-clima', 'nivel-clima');
+            total += getAjustePorFactor('factor-senalizacion', 'nivel-senalizacion');
+            total += getAjustePorFactor('factor-via', 'nivel-via');
+            total += getAjustePorFactor('factor-inesperada', 'nivel-inesperada');
+            return total;
+        }
+        
+        function calcularTRH() {
+            // Obtener TRH base
+            const trhBase = getTRHBase();
+            
+            // Calcular ajustes
+            const ajusteConductor = calcularAjusteConductor();
+            const ajusteEntorno = calcularAjusteEntorno();
+            const ajusteRespuesta = getAjusteRespuesta();
+            
+            // Calcular suma total de ajustes
+            const ajusteTotal = ajusteConductor + ajusteEntorno + ajusteRespuesta;
+            
+            // Calcular TRH ajustado
+            const trhAjustado = trhBase * (1 + ajusteTotal/100);
+            
+            // Mostrar resultados
+            document.getElementById('trh-ajustado-final').textContent = trhAjustado.toFixed(2);
+            document.getElementById('resultado-detallado').classList.remove('hidden');
+            document.getElementById('valor-trh-base').textContent = trhBase.toFixed(2);
+            document.getElementById('valor-ajuste-conductor').textContent = ajusteConductor;
+            document.getElementById('valor-ajuste-entorno').textContent = ajusteEntorno;
+            document.getElementById('valor-ajuste-respuesta').textContent = ajusteRespuesta;
+            document.getElementById('valor-ajuste-total').textContent = ajusteTotal;
+            
+            // Mostrar interpretación
+            const interpretacion = document.getElementById('interpretacion-resultado');
+            if (trhAjustado <= 1.5) {
+                interpretacion.textContent = "Reacción muy rápida (condiciones ideales)";
+            } else if (trhAjustado <= 2.0) {
+                interpretacion.textContent = "Reacción normal";
+            } else if (trhAjustado <= 2.5) {
+                interpretacion.textContent = "Reacción algo lenta (hay factores que afectan)";
+            } else if (trhAjustado <= 3.0) {
+                interpretacion.textContent = "Reacción bastante lenta (varios factores negativos)";
+            } else {
+                interpretacion.textContent = "Reacción extremadamente lenta (capacidad muy comprometida)";
+            }
+        }
+        
+        function calcularEvitabilidad() {
+            const trhAjustado = parseFloat(document.getElementById('trh-ajustado-final').textContent) || 0;
+            const velocidad = parseFloat(document.getElementById('velocidad').value) || 0;
+            const distanciaDisponible = parseFloat(document.getElementById('distancia-disponible').value) || 0;
+            
+            // Validar que se haya calculado el TRH
+            if (trhAjustado === 0) {
+                document.getElementById('resultado-evitabilidad').textContent = "Primero debe calcular el TRH en el paso 6";
+                return;
+            }
+            
+            // Validar campos obligatorios
+            if (velocidad === 0 || distanciaDisponible === 0) {
+                document.getElementById('resultado-evitabilidad').textContent = "Debe completar la velocidad y la distancia disponible";
+                return;
+            }
+            
+            // Convertir velocidad a m/s
+            const velocidadMS = velocidad / 3.6;
+            
+            // Calcular distancia de reacción
+            const distanciaReaccion = velocidadMS * trhAjustado;
+            
+            // Calcular distancia de frenado (fórmula simplificada: v²/(2*μ*g))
+            // μ = 0.7 (asfalto seco), g = 9.81 m/s²
+            const distanciaFrenado = Math.pow(velocidadMS, 2) / (2 * 0.7 * 9.81);
+            
+            // Calcular distancia total para detenerse
+            const distanciaTotal = distanciaReaccion + distanciaFrenado;
+            
+            // Determinar evitabilidad
+            const resultado = document.getElementById('resultado-evitabilidad');
+            let textoResultado = "";
+            
+            if (distanciaTotal > distanciaDisponible * 1.3) {
+                textoResultado = "FÍSICAMENTE INEVITABLE";
+            } else if (distanciaTotal > distanciaDisponible * 1.1) {
+                textoResultado = "PROBABLEMENTE INEVITABLE";
+            } else if (distanciaTotal > distanciaDisponible * 0.9) {
+                textoResultado = "POSIBLEMENTE EVITABLE";
+            } else if (distanciaTotal > distanciaDisponible * 0.7) {
+                textoResultado = "PROBABLEMENTE EVITABLE";
+            } else {
+                textoResultado = "CLARAMENTE EVITABLE";
+            }
+            
+            // Mostrar resultado detallado
+            resultado.innerHTML = `
+                <strong>${textoResultado}</strong><br>
+                <div style="font-size: 0.9em; margin-top: 10px;">
+                    Distancia de reacción: ${distanciaReaccion.toFixed(2)} metros<br>
+                    Distancia de frenado: ${distanciaFrenado.toFixed(2)} metros<br>
+                    Distancia total necesaria: ${distanciaTotal.toFixed(2)} metros<br>
+                    Distancia disponible: ${distanciaDisponible} metros
+                </div>
+            `;
+        }
+        
+        // Establecer la fecha actual en el campo de fecha de evaluación
+        document.getElementById('fecha-evaluacion').valueAsDate = new Date();
+    </script>
+</body>
+</html>

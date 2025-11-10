@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaluación de Personalidad - BFQ-2 Demo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+
+        header {
+            background-color: #003366;
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        h1 {
+            margin: 0;
+        }
+
+        main {
+            margin: 2rem auto;
+            max-width: 900px;
+            background: white;
+            padding: 1.5rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            overflow-y: auto;
+            max-height: 700px;
+        }
+
+        form {
+            margin: 0;
+            padding: 0;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        .form-group input[type="text"] {
+            width: 100%;
+            padding: 0.5rem;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .question {
+            margin-bottom: 1.5rem;
+        }
+
+        .question h3 {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .options {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .options label {
+            margin-right: 1rem;
+            cursor: pointer;
+        }
+
+        .start-btn,
+        .submit-btn {
+            background-color: #003366;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 1.5rem;
+            display: block;
+            width: 100%;
+        }
+
+        .start-btn:hover,
+        .submit-btn:hover {
+            background-color: #00509e;
+        }
+
+        .report-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+
+        .report-actions button {
+            background-color: #2e7d32;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .report-actions button:hover {
+            background-color: #388e3c;
+        }
+
+        .result {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            padding: 1rem;
+            margin-top: 2rem;
+            border-radius: 5px;
+            display: none;
+        }
+
+        .result h3 {
+            margin: 0;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .result p {
+            line-height: 1.5;
+        }
+
+        .timer,
+        .evaluated-info {
+            text-align: center;
+            margin-top: 1rem;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Plataforma Digital BFQ-2 (Demo)</h1>
+        <p>Elaborado en base a la investigación del Tcnl. DEAP Einar Ayala Winkelmann.</p>
+    </header>
+    <main>
+        <form id="bfqForm">
+            <h2>Instrucciones</h2>
+            <p>Por favor, responde cada una de las preguntas seleccionando la opción que mejor describa tu comportamiento
+                habitual.</p>
+
+            <div class="form-group">
+                <label for="evaluado-name">Nombre de la persona evaluada:</label>
+                <input type="text" id="evaluado-name" required>
+            </div>
+
+            <div class="timer" id="timer">Tiempo transcurrido: 00:00:00</div>
+            <button type="button" class="start-btn" id="start-btn">Iniciar Evaluación</button>
+
+            <div id="questions"></div>
+
+            <button type="submit" class="submit-btn" style="display: none;">Evaluar</button>
+        </form>
+
+        <div class="result" id="result">
+            <h3>Resultados de la Evaluación</h3>
+            <div class="evaluated-info">
+                <p><strong>Nombre:</strong> <span id="report-name"></span></p>
+                <p><strong>Tiempo de Evaluación:</strong> <span id="report-time"></span></p>
+            </div>
+            <p><strong>Puntaje obtenido en Energía:</strong> <span id="energia"></span></p>
+            <p><strong>Amabilidad:</strong> <span id="amabilidad"></span></p>
+            <p><strong>Tenacidad:</strong> <span id="tenacidad"></span></p>
+            <p><strong>Estabilidad Emocional:</strong> <span id="estabilidad"></span></p>
+            <p><strong>Apertura Mental:</strong> <span id="apertura"></span></p>
+            <h4>Análisis profesional por dimensión:</h4>
+            <div id="professional-analysis"></div>
+            <div class="report-actions">
+                <button onclick="printResults()">Imprimir Reporte</button>
+                <button onclick="saveResults()">Guardar en Archivo</button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const questions = [
+            // Energía (5 preguntas)
+            { id: "q1", text: "Me considero una persona activa y vigorosa.", dimension: "energia" },
+            { id: "q2", text: "Tiendo a tomar la iniciativa en las actividades grupales.", dimension: "energia" },
+            { id: "q3", text: "Me gusta liderar a las personas en situaciones grupales.", dimension: "energia" },
+            { id: "q4", text: "Soy sociable y disfruto interactuar con otras personas.", dimension: "energia" },
+            { id: "q5", text: "Tengo facilidad para expresar mis ideas en público.", dimension: "energia" },
+
+            // Amabilidad (5 preguntas)
+            { id: "q21", text: "Siempre trato de ayudar a las personas que lo necesitan.", dimension: "amabilidad" },
+            { id: "q22", text: "Creo que hay algo bueno en cada persona.", dimension: "amabilidad" },
+            { id: "q23", text: "Prefiero cooperar antes que competir con los demás.", dimension: "amabilidad" },
+            { id: "q24", text: "Soy empático y me preocupo por el bienestar de los demás.", dimension: "amabilidad" },
+            { id: "q25", text: "Trato de mantener relaciones cordiales con todos.", dimension: "amabilidad" },
+
+            // Tenacidad (5 preguntas)
+            { id: "q41", text: "Planifico mis actividades con meticulosidad.", dimension: "tenacidad" },
+            { id: "q42", text: "Me esfuerzo por completar todas las tareas que inicio.", dimension: "tenacidad" },
+            { id: "q43", text: "Soy disciplinado y sigo las reglas establecidas.", dimension: "tenacidad" },
+            { id: "q44", text: "Soy persistente y no abandono fácilmente mis objetivos.", dimension: "tenacidad" },
+            { id: "q45", text: "Me tomo en serio las responsabilidades que asumo.", dimension: "tenacidad" },
+
+            // Estabilidad Emocional (5 preguntas)
+            { id: "q61", text: "Mantengo la calma en situaciones de estrés.", dimension: "estabilidad" },
+            { id: "q62", text: "No suelo reaccionar de manera exagerada ante problemas menores.", dimension: "estabilidad" },
+            { id: "q63", text: "Manejo mis emociones de forma equilibrada.", dimension: "estabilidad" },
+            { id: "q64", text: "No pierdo el control fácilmente en momentos de presión.", dimension: "estabilidad" },
+            { id: "q65", text: "Me siento seguro de mis decisiones incluso en situaciones difíciles.", dimension: "estabilidad" },
+
+            // Apertura Mental (5 preguntas)
+            { id: "q81", text: "Estoy interesado en aprender cosas nuevas.", dimension: "apertura" },
+            { id: "q82", text: "Me encanta explorar ideas innovadoras.", dimension: "apertura" },
+            { id: "q83", text: "Valoro la diversidad cultural y de opiniones.", dimension: "apertura" },
+            { id: "q84", text: "Disfruto al enfrentarme a retos intelectuales.", dimension: "apertura" },
+            { id: "q85", text: "Encuentro interesante explorar diferentes perspectivas.", dimension: "apertura" },
+        ];
+
+        let startTime;
+        let timerInterval;
+
+        const questionsContainer = document.getElementById("questions");
+        questions.forEach((q) => {
+            const questionHTML = `
+                <div class="question">
+                    <h3>${q.text}</h3>
+                    <div class="options">
+                        <label><input type="radio" name="${q.id}" value="1" required> Totalmente en desacuerdo</label>
+                        <label><input type="radio" name="${q.id}" value="2"> En desacuerdo</label>
+                        <label><input type="radio" name="${q.id}" value="3"> Neutral</label>
+                        <label><input type="radio" name="${q.id}" value="4"> De acuerdo</label>
+                        <label><input type="radio" name="${q.id}" value="5"> Totalmente de acuerdo</label>
+                    </div>
+                </div>`;
+            questionsContainer.innerHTML += questionHTML;
+        });
+
+        document.getElementById("start-btn").addEventListener("click", function() {
+            const evaluadoName = document.getElementById("evaluado-name").value;
+            if (evaluadoName.trim() === "") {
+                alert("Por favor, ingrese el nombre de la persona evaluada para comenzar.");
+                return;
+            }
+
+            this.style.display = 'none';
+            document.querySelector('.submit-btn').style.display = 'block';
+            questionsContainer.style.display = 'block';
+
+            startTime = new Date();
+            timerInterval = setInterval(updateTimer, 1000);
+
+            document.getElementById("evaluado-name").disabled = true;
+        });
+
+        function updateTimer() {
+            const elapsedTime = new Date() - startTime;
+            const seconds = Math.floor(elapsedTime / 1000) % 60;
+            const minutes = Math.floor(elapsedTime / (1000 * 60)) % 60;
+            const hours = Math.floor(elapsedTime / (1000 * 60 * 60));
+
+            document.getElementById("timer").textContent =
+                `Tiempo transcurrido: ${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+        }
+
+        function pad(num) {
+            return num < 10 ? '0' + num : num;
+        }
+
+        document.getElementById("bfqForm").addEventListener("submit", function(e) {
+            e.preventDefault();
+            clearInterval(timerInterval);
+
+            const formData = new FormData(e.target);
+            const evaluadoName = document.getElementById("evaluado-name").value;
+            const evaluadoTime = document.getElementById("timer").textContent;
+
+            const results = {
+                energia: 0,
+                amabilidad: 0,
+                tenacidad: 0,
+                estabilidad: 0,
+                apertura: 0,
+            };
+
+            questions.forEach((q) => {
+                const value = parseInt(formData.get(q.id));
+                results[q.dimension] += value;
+            });
+
+            const dimensions = Object.keys(results);
+            dimensions.forEach((dim) => {
+                const numQuestions = questions.filter((q) => q.dimension === dim).length;
+                results[dim] = (results[dim] / numQuestions).toFixed(2);
+            });
+
+            document.getElementById("report-name").textContent = evaluadoName;
+            document.getElementById("report-time").textContent = evaluadoTime.replace('Tiempo transcurrido: ', '');
+            document.getElementById("energia").textContent = results.energia;
+            document.getElementById("amabilidad").textContent = results.amabilidad;
+            document.getElementById("tenacidad").textContent = results.tenacidad;
+            document.getElementById("estabilidad").textContent = results.estabilidad;
+            document.getElementById("apertura").textContent = results.apertura;
+
+            const professionalAnalysis = `
+                <h4>Análisis de la Aplicación del BFQ-2 en la UTOP: Orientaciones por Dimensión</h4>
+                <p>El BFQ-2 es una herramienta valiosa para la gestión de personal en la UTOP. A continuación, se presenta una guía detallada para interpretar los resultados y tomar decisiones estratégicas basadas en el perfil de personalidad del evaluado. Esta información permite asignar al personal a roles donde sus fortalezas sean maximizadas y sus áreas de mejora sean apoyadas.</p>
+                
+                <hr>
+                
+                <h4>1. Dimensión: Energía (Extraversión)</h4>
+                <p>Esta dimensión evalúa el dinamismo, la asertividad y la sociabilidad. En la UTOP, una puntuación alta en Energía es un indicador clave de proactividad y liderazgo. Estos efectivos son ideales para roles que exigen interacción constante y toma de decisiones en el campo.</p>
+                <p><strong>Guía para la Autoridad Policial:</strong></p>
+                <ul>
+                    <li><strong>Puntuación Alta (≥ 4.0):</strong> Designar a estos efectivos para <strong>roles de liderazgo, mando de equipo y operativos de campo</strong>. Son ideales para liderar equipos en situaciones de alto dinamismo. Considere capacitaciones en **gestión de crisis**.</li>
+                    <li><strong>Puntuación Media (3.0 - 3.9):</strong> Pueden desempeñarse bien en <strong>roles de soporte operativo o de grupo</strong>. Fomentar su participación en actividades que requieran colaboración para desarrollar su asertividad y proactividad.</li>
+                    <li><strong>Puntuación Baja (< 3.0):</strong> Asignar a <strong>roles que demanden concentración y autonomía</strong>, como análisis de inteligencia o tareas administrativas. Proporcione mentoría para mejorar sus habilidades de comunicación en público.</li>
+                </ul>
+                
+                <hr>
+                
+                <h4>2. Dimensión: Amabilidad (Conformidad)</h4>
+                <p>La amabilidad mide la empatía, la cooperación y la capacidad de mantener relaciones cordiales. En el ámbito policial, es crucial para la <strong>interacción con la comunidad</strong> y la desescalada de conflictos. Estos efectivos contribuyen directamente a mejorar la imagen institucional y la confianza ciudadana.</p>
+                <p><strong>Guía para la Autoridad Policial:</strong></p>
+                <ul>
+                    <li><strong>Puntuación Alta (≥ 4.0):</strong> Son excelentes para <strong>roles de mediación, enlace comunitario y resolución de conflictos</strong>. Considerar su asignación a unidades de proximidad social y como negociadores.</li>
+                    <li><strong>Puntuación Media (3.0 - 3.9):</strong> Son colaboradores eficaces. Pueden ser colocados en <strong>equipos de trabajo interdisciplinarios</strong>. Promover su participación en actividades de sensibilización social.</li>
+                    <li><strong>Puntuación Baja (< 3.0):</strong> Requieren <strong>capacitación intensiva en inteligencia emocional y manejo de la ira</strong>. Evitar roles de alta interacción con el público en situaciones de conflicto y asignar a tareas con protocolos muy definidos.</li>
+                </ul>
+                
+                <hr>
+                
+                <h4>3. Dimensión: Tenacidad (Responsabilidad)</h4>
+                <p>La tenacidad evalúa la disciplina, el orden y la persistencia. Es un predictor clave del desempeño. En la UTOP, un alto nivel de tenacidad asegura el cumplimiento de protocolos, la organización de tareas y la finalización de misiones.</p>
+                <p><strong>Guía para la Autoridad Policial:</strong></p>
+                <ul>
+                    <li><strong>Puntuación Alta (≥ 4.0):</strong> Son ideales para <strong>roles de planificación, supervisión y logística</strong>. Asignarlos a posiciones que requieran una alta atención al detalle, disciplina y cumplimiento de plazos.</li>
+                    <li><strong>Puntuación Media (3.0 - 3.9):</strong> Son confiables en tareas cotidianas. Brindarles apoyo y seguimiento para que se enfoquen en la **finalización de proyectos a largo plazo**.</li>
+                    <li><strong>Puntuación Baja (< 3.0):</strong> Pueden tener dificultades con la organización. Se les debe asignar <strong>tareas con supervisión cercana y plazos definidos</strong>. Considerar programas de capacitación en gestión del tiempo y auto-disciplina.</li>
+                </ul>
+                
+                <hr>
+                
+                <h4>4. Dimensión: Estabilidad Emocional (Neuroticismo)</h4>
+                <p>Esta dimensión mide la capacidad para manejar el estrés y la presión. En un entorno de alto riesgo como la UTOP, una alta estabilidad emocional es vital para el control en situaciones de crisis y para prevenir el **síndrome de Burnout**.</p>
+                <p><strong>Guía para la Autoridad Policial:</strong></p>
+                <ul>
+                    <li><strong>Puntuación Alta (≥ 4.0):</strong> Son indispensables para <strong>roles de intervención en crisis y control de multitudes</strong>. Su resiliencia minimiza el riesgo de reacciones negativas y uso excesivo de la fuerza.</li>
+                    <li><strong>Puntuación Media (3.0 - 3.9):</strong> Son capaces de manejar el estrés, pero requieren **monitoreo en situaciones de alta presión**. Proporcionarles herramientas de manejo del estrés para mantener su bienestar.</li>
+                    <li><strong>Puntuación Baja (< 3.0):</strong> Tienen un alto riesgo de estrés y ansiedad. Deben ser <strong>reubicados en roles de menor exposición al conflicto</strong> y recibir <strong>seguimiento psicológico continuo</strong>. Evitar su asignación a operativos de alto riesgo.</li>
+                </ul>
+                
+                <hr>
+                
+                <h4>5. Dimensión: Apertura Mental (Apertura a la Experiencia)</h4>
+                <p>Evalúa la curiosidad, creatividad y adaptabilidad. Un alto puntaje indica que el efectivo está dispuesto a innovar y a aprender de nuevas experiencias, lo cual es vital para la modernización y adaptación de la institución.</p>
+                <p><strong>Guía para la Autoridad Policial:</strong></p>
+                <ul>
+                    <li><strong>Puntuación Alta (≥ 4.0):</strong> Son valiosos para <strong>roles de formación, investigación y desarrollo de nuevas estrategias</strong>. Involucrarlos en la creación de programas de capacitación y en la modernización de protocolos.</li>
+                    <li><strong>Puntuación Media (3.0 - 3.9):</strong> Son adaptables a los cambios. Fomentar su participación en <strong>proyectos que los expongan a nuevas ideas y enfoques</strong>.</li>
+                    <li><strong>Puntuación Baja (< 3.0):</strong> Son más propensos a seguir rutinas. Destacarlos en roles que demanden **apego estricto a los protocolos y procedimientos establecidos**. Ofrecerles formación para que desarrollen flexibilidad y adaptabilidad.</li>
+                </ul>
+            `;
+
+            document.getElementById("professional-analysis").innerHTML = professionalAnalysis;
+            document.getElementById("result").style.display = "block";
+        });
+
+        function printResults() {
+            const printContent = document.getElementById("result").innerHTML;
+            const originalContent = document.body.innerHTML;
+            document.body.innerHTML = printContent;
+            window.print();
+            document.body.innerHTML = originalContent;
+            window.location.reload();
+        }
+        
+        function saveResults() {
+            const evaluadoName = document.getElementById("report-name").textContent;
+            const evaluadoTime = document.getElementById("report-time").textContent;
+            const energia = document.getElementById("energia").textContent;
+            const amabilidad = document.getElementById("amabilidad").textContent;
+            const tenacidad = document.getElementById("tenacidad").textContent;
+            const estabilidad = document.getElementById("estabilidad").textContent;
+            const apertura = document.getElementById("apertura").textContent;
+            const analysis = document.getElementById("professional-analysis").innerText;
+
+            const fileContent = `
+Resultados de la Evaluación
+Nombre: ${evaluadoName}
+Tiempo de Evaluación: ${evaluadoTime}
+Puntaje obtenido en Energía: ${energia}
+Amabilidad: ${amabilidad}
+Tenacidad: ${tenacidad}
+Estabilidad Emocional: ${estabilidad}
+Apertura Mental: ${apertura}
+
+Análisis profesional por dimensión:
+${analysis}
+`;
+
+            const blob = new Blob([fileContent], {
+                type: 'text/plain;charset=utf-8'
+            });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Reporte_${evaluadoName.replace(/\s/g, '_')}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,220 @@
+Anexo
+Propuesta de herramienta
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Evaluación de Personalidad - BFQ-2</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f9;
+    }
+
+    header {
+      background-color: #003366;
+      color: white;
+      padding: 1.5rem;
+      text-align: center;
+    }
+
+    h1 {
+      margin: 0;
+    }
+
+    main {
+      margin: 2rem auto;
+      max-width: 900px;
+      background: white;
+      padding: 1.5rem;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      border-radius: 8px;
+      overflow-y: auto;
+      max-height: 700px;
+    }
+
+    form {
+      margin: 0;
+      padding: 0;
+    }
+
+    .question {
+      margin-bottom: 1.5rem;
+    }
+
+    .question h3 {
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .options {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .options label {
+      margin-right: 1rem;
+      cursor: pointer;
+    }
+
+    .submit-btn {
+      background-color: #003366;
+      color: white;
+      border: none;
+      padding: 1rem 2rem;
+      font-size: 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 1.5rem;
+      display: block;
+      width: 100%;
+    }
+
+    .submit-btn:hover {
+      background-color: #00509e;
+    }
+
+    .result {
+      background-color: #e8f5e9;
+      color: #2e7d32;
+      padding: 1rem;
+      margin-top: 2rem;
+      border-radius: 5px;
+      display: none;
+    }
+
+    .result h3 {
+      margin: 0;
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    .result p {
+      line-height: 1.5;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>Evaluación de Personalidad (BFQ-2)</h1>
+    <p>Herramienta para evaluar rasgos de personalidad en el contexto policial</p>
+  </header>
+  <main>
+    <form id="bfqForm">
+      <h2>Instrucciones</h2>
+      <p>Por favor, responde cada una de las preguntas seleccionando la opción que mejor describa tu comportamiento habitual.</p>
+
+      <!-- Preguntas del BFQ-2 -->
+      <div id="questions"></div>
+
+      <button type="submit" class="submit-btn">Evaluar</button>
+    </form>
+
+    <div class="result" id="result">
+      <h3>Resultados de la Evaluación</h3>
+      <p><strong>Energía:</strong> <span id="energia"></span></p>
+      <p><strong>Amabilidad:</strong> <span id="amabilidad"></span></p>
+      <p><strong>Tenacidad:</strong> <span id="tenacidad"></span></p>
+      <p><strong>Estabilidad Emocional:</strong> <span id="estabilidad"></span></p>
+      <p><strong>Apertura Mental:</strong> <span id="apertura"></span></p>
+      <h4>Orientación:</h4>
+      <ul id="recommendations"></ul>
+    </div>
+  </main>
+
+  <script>
+    // Preguntas basadas en las 134 del BFQ-2
+    const questions = [
+      // Ejemplo de preguntas de Energía
+      { id: "q1", text: "Me considero una persona activa y vigorosa.", dimension: "energia" },
+      { id: "q2", text: "Tiendo a tomar la iniciativa en las actividades grupales.", dimension: "energia" },
+      { id: "q3", text: "Prefiero estar en compañía que solo.", dimension: "energia" },
+      { id: "q4", text: "Me gusta liderar en situaciones grupales.", dimension: "energia" },
+
+      // Ejemplo de preguntas de Amabilidad
+      { id: "q5", text: "Siempre trato de ayudar a las personas que lo necesitan.", dimension: "amabilidad" },
+      { id: "q6", text: "Creo que hay algo bueno en cada persona.", dimension: "amabilidad" },
+      { id: "q7", text: "Prefiero cooperar antes que competir.", dimension: "amabilidad" },
+      { id: "q8", text: "Soy empático y me preocupo por el bienestar de los demás.", dimension: "amabilidad" },
+
+      // Ejemplo de preguntas de Tenacidad
+      { id: "q9", text: "Planifico mis actividades con meticulosidad.", dimension: "tenacidad" },
+      { id: "q10", text: "Me esfuerzo por completar todas las tareas que inicio.", dimension: "tenacidad" },
+
+      // Ejemplo de preguntas de Estabilidad Emocional
+      { id: "q11", text: "Mantengo la calma en situaciones de estrés.", dimension: "estabilidad" },
+      { id: "q12", text: "No suelo reaccionar de manera exagerada ante problemas menores.", dimension: "estabilidad" },
+
+      // Ejemplo de preguntas de Apertura Mental
+      { id: "q13", text: "Estoy interesado en aprender cosas nuevas.", dimension: "apertura" },
+      { id: "q14", text: "Me encanta explorar ideas innovadoras.", dimension: "apertura" },
+    ];
+
+    // Renderizar preguntas dinámicamente
+    const questionsContainer = document.getElementById("questions");
+    questions.forEach((q) => {
+      const questionHTML = `
+        <div class="question">
+          <h3>${q.text}</h3>
+          <div class="options">
+            <label><input type="radio" name="${q.id}" value="1" required> Totalmente en desacuerdo</label>
+            <label><input type="radio" name="${q.id}" value="2"> En desacuerdo</label>
+            <label><input type="radio" name="${q.id}" value="3"> Neutral</label>
+            <label><input type="radio" name="${q.id}" value="4"> De acuerdo</label>
+            <label><input type="radio" name="${q.id}" value="5"> Totalmente de acuerdo</label>
+          </div>
+        </div>`;
+      questionsContainer.innerHTML += questionHTML;
+    });
+
+    // Procesar resultados
+    document.getElementById("bfqForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+
+      const results = {
+        energia: 0,
+        amabilidad: 0,
+        tenacidad: 0,
+        estabilidad: 0,
+        apertura: 0,
+      };
+
+      questions.forEach((q) => {
+        results[q.dimension] += parseInt(formData.get(q.id));
+      });
+
+      const dimensions = Object.keys(results);
+      dimensions.forEach((dim) => {
+        results[dim] = (results[dim] / (questions.filter((q) => q.dimension === dim).length)).toFixed(2);
+      });
+
+      // Mostrar resultados
+      document.getElementById("energia").textContent = results.energia;
+      document.getElementById("amabilidad").textContent = results.amabilidad;
+      document.getElementById("tenacidad").textContent = results.tenacidad;
+      document.getElementById("estabilidad").textContent = results.estabilidad;
+      document.getElementById("apertura").textContent = results.apertura;
+
+      // Proporcionar orientación
+      const recommendations = document.getElementById("recommendations");
+      recommendations.innerHTML = `
+        <li>Energía: ${results.energia >= 3 ? "Adecuado para roles de liderazgo y operativos." : "Requiere mejorar habilidades de liderazgo."}</li>
+        <li>Amabilidad: ${results.amabilidad >= 3 ? "Apto para trabajos colaborativos." : "Evitar roles que exijan alta empatía."}</li>
+        <li>Tenacidad: ${results.tenacidad >= 3 ? "Ideal para tareas que requieren disciplina y organización." : "Requiere fortalecer la autoorganización."}</li>
+        <li>Estabilidad emocional: ${results.estabilidad >= 3 ? "Apto para manejar situaciones de estrés." : "Evitar roles en alta presión."}</li>
+        <li>Apertura mental: ${results.apertura >= 3 ? "Excelente para roles innovadores." : "Evitar tareas que requieran constante adaptabilidad."}</li>
+      `;
+
+      document.getElementById("result").style.display = "block";
+    });
+  </script>
+</body>
+
+</html>
+
